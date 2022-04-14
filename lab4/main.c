@@ -1,40 +1,36 @@
 #include <stdio.h>
 
-void find_num(int* p, int num) {
-	for(int i = 0; i < 10; i++) {
-	  	if(*(p + i) == num) {
-		   	printf("&n[%d]->%p, n[%d] = %d, ", i, p, i, *(p + i));
-		   	printf("p->%p, *p = %d\n", p, *(p + i));
-	  	}
-	}
-}
-void sort(int** ap) {
-	for(int i = 0; i < 10; i++) {
-		for(int j = i + 1; j < 10; j++) {
-			if(*ap[i] > *ap[j]) {
-			    int* temp = ap[i];
-			    ap[i] = ap[j];
-			    ap[j] = temp;
-		   	}
-	  	}
-	  	printf("&n[%d]->%p, n[%d] = %d, ", i, ap[i], i, *(ap[i]));
-	  	printf("ap[%d]->%p, *ap[%d] = %d\n", i, ap[i], i, *(ap[i]));
- 	}
+static int count;
+
+int* findAddress(int num, int* n){
+    count = 0;
+    while(*n != num){
+        n++;
+        count++;
+        if(count>10)return 0;
+    }
+    return n;
 }
 
-int main(void) {
- 	int n[10] = {6, 4, 7, 2, 0, 9, 8, 1, 5, 3};
- 	int* p;
- 	int* ap[10];
- 	int num = 9;
- 	p = n;
- 	for(int i = 0, j = 0; i < 10; i++) {
-  		ap[i] = &n[j++];
- 	}
-	printf("N0.1 -------------------\n");
- 	find_num(p, num);
- 	printf("N0.2 -------------------\n");
- 	sort(ap);
 
- 	return 0;
+int main()
+{
+    int n[] = {6,4,7,12,0,11,8,1,5,3};
+    int* p;
+    int num1 = 11;
+    p = findAddress(num1, n);
+    printf("No.1-----------------\n&n[%d] -> %p, n[%d] = %d; p -> %p, *p = %d\n",count , &n[count], count, n[count], p, *p);
+    
+    printf("No.2-----------------\n");
+    int* ap[10];
+    int i = 0, b = 0;
+    while(i < 10){
+        if(findAddress(b, n)){
+            ap[i] = findAddress(b, n);
+            printf("&n[%d] -> %p, n[%d] = %d; ap[%d] -> %p, *ap[%d] = %d\n", count, &n[count], count, n[count], i, ap[i], i, *ap[i]);
+            i++;
+            b++;
+        }    
+        else b++;  
+    }    
 }
